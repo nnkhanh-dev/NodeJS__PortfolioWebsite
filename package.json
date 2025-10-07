@@ -1,0 +1,56 @@
+{
+  "name": "nodejs__portfoliowebsite",
+  "version": "1.0.0",
+  "description": "Website Portfolio for Developer",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon --inspect app.js ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "app.js",
+      "routes",
+      "views",
+      "controllers",
+      "config"
+    ],
+    "ext": "js,json,handlebars,hbs",
+    "ignore": [
+      "node_modules",
+      "public"
+    ],
+    "legacyWatch": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nnkhanh-dev/NodeJS__PortfolioWebsite.git"
+  },
+  "keywords": [
+    "portfolio",
+    "blog",
+    "nodejs",
+    "mongodb",
+    "mvc",
+    "personal",
+    "website"
+  ],
+  "author": "Nguyen Nhat Khanh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nnkhanh-dev/NodeJS__PortfolioWebsite/issues"
+  },
+  "homepage": "https://github.com/nnkhanh-dev/NodeJS__PortfolioWebsite#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-handlebars": "^8.0.3",
+    "express-session": "^1.18.2",
+    "mongoose": "^8.19.1",
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.10",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0"
+  }
+}

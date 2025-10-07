@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/images/logo_nk.png">
+    <title>Admin Dashboard - {{title}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    {{> admin-sidebar}}
+    {{> admin-header}}
+
+    <!-- Main Content -->
+    <main class="md:ml-64 pt-16 min-h-screen">
+        <div class="p-4">
+            {{{body}}}
+        </div>
+    </main>
+
+    {{> admin-footer}}
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdown');
+            const button = event.target.closest('button');
+            if (!button && !dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

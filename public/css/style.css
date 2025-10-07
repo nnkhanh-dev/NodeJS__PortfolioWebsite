@@ -1,0 +1,39 @@
+.grid-background {
+    background: #000000;
+    background-image: 
+      linear-gradient(to right, rgba(75, 85, 99, 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(75, 85, 99, 0.4) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+@keyframes typing {
+  0% { width: 0; }        /* bắt đầu */
+  33.33% { width: 100%; } /* gõ hết chữ trong 2s */
+  66.66% { width: 100%; } /* dừng 2s */
+  100% { width: 0; }      /* xóa hết trong 2s */
+}
+
+.typing-effect {
+  display: inline-block;
+  overflow: hidden;
+  border-right: .15em solid white;
+  white-space: nowrap;
+  animation: typing 4s steps(30, end) infinite, blink .75s step-end infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); } /* di chuyển lên 10px ở giữa */
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+.animate-pulse-slow {
+    animation: pulse-slow 2s infinite;
+}

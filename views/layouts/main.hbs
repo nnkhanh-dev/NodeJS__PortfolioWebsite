@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/images/logo_nk.png">
+    <title>Nguyễn Nhật Khánh</title>
+    <!-- Template Style -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- TailwindCSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    {{> header}}
+    
+    <main>
+        {{{body}}}
+    </main>
+    
+    {{> footer}}
+
+    <script>
+        // Header background change on scroll
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                header.classList.remove('bg-transparent');
+                header.classList.add('bg-gray-900');
+            } else {
+                header.classList.add('bg-transparent');
+                header.classList.remove('bg-gray-900');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        let menuOpen = false;
+        mobileMenuBtn.addEventListener('click', () => {
+            menuOpen = !menuOpen;
+            if (menuOpen) {
+                mobileMenu.classList.remove('-translate-y-10', 'opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            } else {
+                mobileMenu.classList.add('-translate-y-10', 'opacity-0', 'pointer-events-none');
+                mobileMenu.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            }
+        });
+        // Optional: close menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuOpen = false;
+                mobileMenu.classList.add('-translate-y-10', 'opacity-0', 'pointer-events-none');
+                mobileMenu.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            });
+        });
+    </script>
+</body>
+</html>

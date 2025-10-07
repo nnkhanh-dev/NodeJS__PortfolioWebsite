@@ -1,0 +1,26 @@
+<header id="main-header" class="fixed top-0 left-0 w-full z-50 bg-transparent backdrop-blur-md border-0 border-gray-800 transition-colors duration-300">
+    <div class="container mx-auto px-4 flex items-center justify-between h-16">
+        <div class="flex items-center gap-3">
+            <span class="font-bold text-lg tracking-wide text-white drop-shadow"><span class="italic text-blue-300">N</span>KHANH</span>
+        </div>
+        <nav class="hidden md:flex gap-8 text-white font-medium">
+            <a href="/" class="hover:text-pink-400 transition-colors">Trang chủ</a>
+            <a href="#" class="hover:text-purple-400 transition-colors">Kỹ năng</a>
+            <a href="#" class="hover:text-blue-400 transition-colors">Học vấn</a>
+            <a href="#" class="hover:text-green-400 transition-colors">Dự án</a>
+            <a href="#" class="hover:text-yellow-400 transition-colors">Bài viết</a>
+        </nav>
+        <!-- Mobile menu button -->
+        <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 rounded-lg hover:bg-white/20 transition-colors group" aria-label="Open Menu">
+            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="fixed top-16 left-0 w-full bg-gray-900 backdrop-blur-md shadow-lg border-b border-gray-800 flex flex-col gap-4 text-white font-medium text-lg px-8 py-6 z-40 transition-all duration-300 transform -translate-y-10 opacity-0 pointer-events-none md:hidden">
+        <a href="#" class="hover:text-pink-400 transition-colors">Trang chủ</a>
+        <a href="#" class="hover:text-purple-400 transition-colors">Kỹ năng</a>
+        <a href="#" class="hover:text-blue-400 transition-colors">Học vấn</a>
+        <a href="#" class="hover:text-green-400 transition-colors">Dự án</a>
+        <a href="#" class="hover:text-yellow-400 transition-colors">Bài viết</a>
+    </div>
+</header>
