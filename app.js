@@ -27,11 +27,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(morgan('combined'))
 
 //Template engine
-app.engine('hbs', handlebars.engine({
+const hbs = handlebars.create({
     extname: '.hbs',
     defaultLayout: 'main',
-    layoutsDir: './views/layouts/'
-}));
+    layoutsDir: './views/layouts/',
+    helpers: {
+        increment: (value) => value + 1,
+        isEven: (value) => value % 2 === 0,
+    }
+});
+
+app.engine('hbs', hbs.engine);
 
 
 app.set('view engine', 'hbs');

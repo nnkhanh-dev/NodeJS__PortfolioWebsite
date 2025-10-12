@@ -6,6 +6,9 @@ class AuthController {
 
   // [GET] /auth/login
   async login(req, res) {
+    if (req.user && req.user.isAdmin) {
+      return res.redirect('/admin/dashboard');
+    }
     res.render('auth/login', { error: null });
   }
 
