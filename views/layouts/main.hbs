@@ -1,14 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Nguyễn Nhật Khánh - Full Stack Developer, chuyên về Web Development, UI/UX Design. Portfolio website showcasing projects and experience.">
+    <meta name="keywords" content="Nguyễn Nhật Khánh, Full Stack Developer, Web Developer, Portfolio, JavaScript, Node.js, React, MongoDB">
+    <meta name="author" content="Nguyễn Nhật Khánh">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yourwebsite.com">
+    
+    <!-- Open Graph Meta Tags (Facebook, LinkedIn) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Nguyễn Nhật Khánh - Full Stack Developer">
+    <meta property="og:description" content="Portfolio website showcasing web development projects and technical skills">
+    <meta property="og:url" content="https://yourwebsite.com">
+    <meta property="og:image" content="https://yourwebsite.com/images/logo_nk.png">
+    <meta property="og:site_name" content="Nguyễn Nhật Khánh Portfolio">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Nguyễn Nhật Khánh - Full Stack Developer">
+    <meta name="twitter:description" content="Portfolio website showcasing web development projects and technical skills">
+    <meta name="twitter:image" content="https://yourwebsite.com/images/logo_nk.png">
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/images/logo_nk.png">
-    <title>Nguyễn Nhật Khánh</title>
+    <link rel="apple-touch-icon" href="/images/logo_nk.png">
+    
+    <title>Nguyễn Nhật Khánh - Full Stack Developer | Portfolio</title>
+    
     <!-- Template Style -->
     <link rel="stylesheet" href="/css/style.css">
     <!-- TailwindCSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- JSON-LD Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Nguyễn Nhật Khánh",
+      "jobTitle": "Full Stack Developer",
+      "url": "https://yourwebsite.com",
+      "sameAs": [
+        "https://github.com/nnkhanh-dev",
+        "https://linkedin.com/in/yourprofile"
+      ],
+      "image": "https://yourwebsite.com/images/logo_nk.png"
+    }
+    </script>
 </head>
 <body>
     {{> header}}
@@ -55,5 +100,17 @@
             });
         });
     </script>
+    <!-- AOS Animation Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>
 </body>
 </html>

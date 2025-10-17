@@ -1,17 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const isAdmin = require('../middlewares/isAdmin');
+const dashboardController = require('../controllers/dashboardController');
 const techTypeRoutes = require('./admin/techtypeRoutes');
+const techRoutes = require('./admin/technicalRoutes');
+const educationRoutes = require('./admin/educationRoutes');
+const experienceRoutes = require('./admin/experienceRoutes');
+const socialRoutes = require('./admin/socialRoutes');
+const projectRoutes = require('./admin/projectRoutes');
+const userRoutes = require('./admin/userRoutes');
 
-router.get('/dashboard', isAdmin, (req, res) => {
-  res.render('admin/dashboard', {
-    layout: 'admin', // Dùng layout riêng cho admin
-    title: 'Admin Dashboard',
-    user: req.user,
-  });
-});
+
+router.get('/dashboard', isAdmin, dashboardController.index);
 
 router.use('/tech-types', techTypeRoutes);
-
+router.use('/technicals', techRoutes);
+router.use('/educations', educationRoutes);
+router.use('/experiences', experienceRoutes);
+router.use('/socials', socialRoutes);
+router.use('/projects', projectRoutes);
+router.use('/user', userRoutes);
 
 module.exports = router;

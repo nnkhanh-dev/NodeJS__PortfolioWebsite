@@ -3,11 +3,12 @@
         <h1 class="text-2xl font-semibold">Danh Sách Loại Kỹ Năng</h1>
         <a href="/admin/tech-types/create" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Thêm Loại Kỹ Năng</a>
     </div>
-    <div class="overflow-x-auto mt-6">
-        <table id="techTypeTable" class="min-w-full border border-gray-200 rounded-2xl my-3 overflow-hidden shadow-sm">
+    <div class="overflow-x-auto">
+        <table id="techTypeTable" class="min-w-full divide-y divide-gray-200 py-5">
             <thead class="bg-gray-100 text-gray-700">
             <tr>
                 <th class="px-6 py-3 text-left text-sm font-semibold">STT</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold">Icon</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold">Tên</th>
                 <th class="px-6 py-3 text-right text-sm font-semibold">Hành động</th>
             </tr>
@@ -16,6 +17,11 @@
             {{#each techTypes}}
             <tr class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-3 text-sm text-gray-700 font-medium">{{increment @index}}</td>
+                <td class="px-6 py-3">
+                    <div class="w-8 h-8 text-blue-600">
+                        {{{this.icon}}}
+                    </div>
+                </td>
                 <td class="px-6 py-3 text-sm text-gray-800">{{this.name}}</td>
                 <td class="px-6 py-3 text-right">
                 <a href="/admin/tech-types/edit/{{this._id}}" 

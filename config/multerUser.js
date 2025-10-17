@@ -1,0 +1,55 @@
+const multer = require('multer');
+const path = require('path');
+
+// Cấu hình lưu trữ file cho user profile
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        if (file.fieldname === 'avatar') {
+            cb(null, 'public/uploads/avatars/');
+        } else if (file.fieldname === 'resume') {
+            cb(null, 'public/uploads/resumes/');
+        }
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+// Kiểm tra loại file
+const fileFilter = (req, file, cb) => {
+    if (file.fieldname === 'avatar') {
+        // Chỉ chấp nhận file ảnh cho avatar
+        const allowedTypes = /jpeg|jpg|png|gif|webp/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Avatar chỉ chấp nhận file ảnh (jpeg, jpg, png, gif, webp)!'));
+        }
+    } else if (file.fieldname === 'resume') {
+        // Chỉ chấp nhận file PDF cho resume
+        const allowedTypes = /pdf/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = file.mimetype === 'application/pdf';
+
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb(new Error('Resume chỉ chấp nhận file PDF!'));
+        }
+    }
+};
+
+// Cấu hình upload
+const uploadUser = multer({
+    storage: storage,
+    limits: {
+        fileSize: 10 * 1024 * 1024 // Giới hạn 10MB
+    },
+    fileFilter: fileFilter
+});
+
+module.exports = uploadUser;

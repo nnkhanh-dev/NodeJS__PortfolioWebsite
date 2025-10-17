@@ -1,0 +1,88 @@
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold">Chi Tiết Kinh Nghiệm Làm Việc</h1>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Company Information -->
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Thông Tin Công Ty</h2>
+            <div class="space-y-3">
+                <div>
+                    <span class="font-semibold text-gray-600">Tên công ty:</span>
+                    <p class="text-gray-900 mt-1">{{experience.name}}</p>
+                </div>
+                <div>
+                    <span class="font-semibold text-gray-600">Vị trí:</span>
+                    <p class="text-gray-900 mt-1">{{experience.position}}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Period -->
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Thời Gian Làm Việc</h2>
+            <div class="space-y-3">
+                <div>
+                    <span class="font-semibold text-gray-600">Từ:</span>
+                    <p class="text-gray-900 mt-1">{{experience.from}}</p>
+                </div>
+                <div>
+                    <span class="font-semibold text-gray-600">Đến:</span>
+                    <p class="text-gray-900 mt-1">{{experience.to}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Description -->
+    {{#if experience.description}}
+    <div class="bg-gray-50 p-4 rounded-lg mt-6">
+        <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Mô Tả Công Việc</h2>
+        <p class="text-gray-900 whitespace-pre-line">{{experience.description}}</p>
+    </div>
+    {{/if}}
+
+    <!-- Features -->
+    {{#if experience.features}}
+    <div class="bg-gray-50 p-4 rounded-lg mt-6">
+        <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Các Tính Năng Đã Làm</h2>
+        <div class="text-gray-900 whitespace-pre-line">{{experience.features}}</div>
+    </div>
+    {{/if}}
+
+    <!-- User Information -->
+    <div class="bg-gray-50 p-4 rounded-lg mt-6">
+        <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Thông Tin Người Tạo</h2>
+        <div class="space-y-2">
+            <div>
+                <span class="font-semibold text-gray-600">Tên người dùng:</span>
+                <span class="text-gray-900 ml-2">{{experience.userId.name}}</span>
+            </div>
+            {{#if experience.userId.email}}
+            <div>
+                <span class="font-semibold text-gray-600">Email:</span>
+                <span class="text-gray-900 ml-2">{{experience.userId.email}}</span>
+            </div>
+            {{/if}}
+            <div>
+                <span class="font-semibold text-gray-600">Ngày tạo:</span>
+                <span class="text-gray-900 ml-2">{{formatDate experience.createdAt}}</span>
+            </div>
+            <div>
+                <span class="font-semibold text-gray-600">Cập nhật lần cuối:</span>
+                <span class="text-gray-900 ml-2">{{formatDate experience.updatedAt}}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-6 flex justify-end space-x-4">
+        <a href="/admin/experiences/edit/{{experience._id}}" class="bg-yellow-500 text-white px-6 py-2 rounded-md hover:bg-yellow-600">
+            Chỉnh sửa
+        </a>
+        <a href="/admin/experiences" class="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600">
+            Quay lại
+        </a>
+    </div>
+</div>

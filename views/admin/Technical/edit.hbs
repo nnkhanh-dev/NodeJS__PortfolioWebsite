@@ -1,0 +1,27 @@
+<h1 class="text-2xl font-bold mb-4">Chỉnh sửa Công Nghệ</h1>
+
+<form action="/admin/technicals/edit/{{technical._id}}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div class="mb-4">
+        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Tên công nghệ:</label>
+        <input type="text" id="name" name="name" value="{{technical.name}}" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    
+    <div class="mb-4">
+        <label for="typeId" class="block text-gray-700 text-sm font-bold mb-2">Loại công nghệ:</label>
+        <select id="typeId" name="typeId" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <option value="">-- Chọn loại công nghệ --</option>
+            {{#each techTypes}}
+                <option value="{{this._id}}" {{#ifEqual this._id ../technical.typeId}}selected{{/ifEqual}}>{{this.name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    
+    {{#if error}}
+        <p class="text-red-500 text-xs italic mb-4">{{error}}</p>
+    {{/if}}
+    
+    <div class="flex items-center justify-between">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cập nhật</button>
+        <a href="/admin/technicals" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Hủy</a>
+    </div>
+</form>

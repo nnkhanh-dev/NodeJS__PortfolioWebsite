@@ -1,0 +1,204 @@
+<h1 class="text-2xl font-bold mb-4">Thêm Dự Án Mới</h1>
+
+<form action="/admin/projects/create" method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div class="mb-4">
+        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Tên dự án:</label>
+        <input type="text" id="name" name="name" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    
+    <div class="mb-4">
+        <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Mô tả dự án:</label>
+        <textarea id="description" name="description" required rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+    </div>
+    
+    <div class="mb-4">
+        <label for="thumbnail" class="block text-gray-700 text-sm font-bold mb-2">Thumbnail:</label>
+        <div id="dropArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition-colors">
+            <input type="file" id="thumbnail" required name="thumbnail" accept="image/*" class="hidden">
+            <div id="dropText">
+                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                <p class="text-gray-600">Kéo thả ảnh vào đây hoặc click để chọn</p>
+                <p class="text-gray-400 text-sm mt-2">Hỗ trợ: JPG, PNG, GIF, WEBP (Tối đa 5MB)</p>
+            </div>
+            <div id="imagePreviewContainer" class="hidden">
+                <img id="imagePreview" src="" alt="Preview" class="max-w-full max-h-64 mx-auto rounded">
+                <p id="fileName" class="text-gray-600 mt-2"></p>
+                <button type="button" id="removeImage" class="mt-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm">
+                    <i class="fas fa-times"></i> Xóa ảnh
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mb-4">
+        <label for="url" class="block text-gray-700 text-sm font-bold mb-2">URL Demo/Project:</label>
+        <input type="url" id="url" name="url" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <p class="text-gray-600 text-xs mt-1">Link đến bản demo hoặc trang dự án</p>
+    </div>
+    
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Công nghệ sử dụng:</label>
+        <div class="border border-gray-300 rounded p-4 max-h-64 overflow-y-auto">
+            {{#each technologies}}
+            <div class="flex items-center mb-2">
+                <input type="checkbox" id="tech_{{this._id}}" name="technologies" value="{{this._id}}" 
+                       class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                <label for="tech_{{this._id}}" class="flex-1 text-sm text-gray-700 cursor-pointer">
+                    {{this.name}}
+                    {{#if this.typeId}}
+                    <span class="text-xs text-gray-500">({{this.typeId.name}})</span>
+                    {{/if}}
+                </label>
+            </div>
+            {{/each}}
+        </div>
+        <p class="text-gray-600 text-xs mt-1">Chọn các công nghệ đã sử dụng trong dự án này</p>
+    </div>
+    
+    <!-- Preview -->
+    <div class="mb-4 p-4 bg-gray-50 rounded">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Xem trước:</label>
+        <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0">
+                <div id="thumbnailPreview" class="w-32 h-32 bg-gray-200 rounded flex items-center justify-center overflow-hidden">
+                    <span class="text-gray-400 text-xs">No Image</span>
+                </div>
+            </div>
+            <div class="flex-1">
+                <h3 id="namePreview" class="text-lg font-bold text-gray-800 mb-2">Tên dự án</h3>
+                <p id="descriptionPreview" class="text-gray-600 text-sm mb-2">Mô tả dự án</p>
+                <a id="urlPreview" href="#" target="_blank" class="text-blue-600 hover:underline text-sm"></a>
+            </div>
+        </div>
+    </div>
+    
+    {{#if error}}
+        <p class="text-red-500 text-xs italic mb-4">{{error}}</p>
+    {{/if}}
+    
+    <div class="flex items-center justify-between">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Thêm mới</button>
+        <a href="/admin/projects" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Hủy</a>
+    </div>
+</form>
+
+<script>
+    // Drag and drop functionality
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('thumbnail');
+    const dropText = document.getElementById('dropText');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const imagePreview = document.getElementById('imagePreview');
+    const fileName = document.getElementById('fileName');
+    const removeImageBtn = document.getElementById('removeImage');
+    const thumbnailPreview = document.getElementById('thumbnailPreview');
+
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    // Highlight drop area when dragging over it
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+        dropArea.classList.add('border-blue-500', 'bg-blue-50');
+    }
+
+    function unhighlight(e) {
+        dropArea.classList.remove('border-blue-500', 'bg-blue-50');
+    }
+
+    // Handle dropped files
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        
+        if (files.length > 0) {
+            fileInput.files = files;
+            handleFiles(files);
+        }
+    }
+
+    // Handle click to select file
+    dropArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            handleFiles(this.files);
+        }
+    });
+
+    function handleFiles(files) {
+        const file = files[0];
+        
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+            alert('Vui lòng chọn file ảnh!');
+            return;
+        }
+
+        // Check file size (5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Kích thước file không được vượt quá 5MB!');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            thumbnailPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-full h-full object-cover">`;
+            fileName.textContent = file.name;
+            dropText.classList.add('hidden');
+            imagePreviewContainer.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Remove image
+    removeImageBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        fileInput.value = '';
+        dropText.classList.remove('hidden');
+        imagePreviewContainer.classList.add('hidden');
+        thumbnailPreview.innerHTML = '<span class="text-gray-400 text-xs">No Image</span>';
+    });
+
+    // Live preview for other fields
+    const nameInput = document.getElementById('name');
+    const descriptionInput = document.getElementById('description');
+    const urlInput = document.getElementById('url');
+    
+    const namePreview = document.getElementById('namePreview');
+    const descriptionPreview = document.getElementById('descriptionPreview');
+    const urlPreview = document.getElementById('urlPreview');
+
+    nameInput.addEventListener('input', function() {
+        namePreview.textContent = this.value || 'Tên dự án';
+    });
+
+    descriptionInput.addEventListener('input', function() {
+        descriptionPreview.textContent = this.value || 'Mô tả dự án';
+    });
+
+    urlInput.addEventListener('input', function() {
+        urlPreview.textContent = this.value;
+        urlPreview.href = this.value || '#';
+    });
+</script>

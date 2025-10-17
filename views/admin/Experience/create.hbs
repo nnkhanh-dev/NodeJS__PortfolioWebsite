@@ -1,0 +1,43 @@
+<h1 class="text-2xl font-bold mb-4">Thêm Kinh Nghiệm Làm Việc Mới</h1>
+
+<form action="/admin/experiences/create" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div class="mb-4">
+        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Tên công ty:</label>
+        <input type="text" id="name" name="name" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    
+    <div class="mb-4">
+        <label for="position" class="block text-gray-700 text-sm font-bold mb-2">Vị trí công việc:</label>
+        <input type="text" id="position" name="position" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    
+    <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+            <label for="from" class="block text-gray-700 text-sm font-bold mb-2">Từ:</label>
+            <input type="text" id="from" name="from" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
+        </div>
+        <div>
+            <label for="to" class="block text-gray-700 text-sm font-bold mb-2">Đến:</label>
+            <input type="text" id="to" name="to" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
+        </div>
+    </div>
+    
+    <div class="mb-4">
+        <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Mô tả công việc:</label>
+        <textarea id="description" name="description" required rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+    </div>
+    
+    <div class="mb-4">
+        <label for="features" class="block text-gray-700 text-sm font-bold mb-2">Các tính năng đã làm:</label>
+        <textarea id="features" name="features"  rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" ></textarea>
+    </div>
+    
+    {{#if error}}
+        <p class="text-red-500 text-xs italic mb-4">{{error}}</p>
+    {{/if}}
+    
+    <div class="flex items-center justify-between">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Thêm</button>
+        <a href="/admin/experiences" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Hủy</a>
+    </div>
+</form>

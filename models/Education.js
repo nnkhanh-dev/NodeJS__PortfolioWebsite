@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 
 const educationSchema = new mongoose.Schema({
   name: { type: String },
-  from: { type: Date },
-  to: { type: Date },
+  from: { type: String },
+  to: { type: String },
   major: { type: String },
   level: { type: String },
   gpa: { type: Number },
+  achievements: { type: String },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

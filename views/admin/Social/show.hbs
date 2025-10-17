@@ -1,0 +1,91 @@
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold">Chi Tiết Mạng Xã Hội</h1>
+    </div>
+
+    <!-- Social Media Preview Card -->
+    <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-lg mb-6 text-center">
+        <i class="{{social.icon}} text-6xl text-blue-600 mb-4"></i>
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">{{social.name}}</h2>
+        <a href="{{social.url}}" target="_blank" class="text-blue-600 hover:underline text-lg">
+            {{social.url}}
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Social Information -->
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Thông Tin Mạng Xã Hội</h2>
+            <div class="space-y-3">
+                <div>
+                    <span class="font-semibold text-gray-600">Tên:</span>
+                    <p class="text-gray-900 mt-1">{{social.name}}</p>
+                </div>
+                <div>
+                    <span class="font-semibold text-gray-600">Icon Class:</span>
+                    {{{social.icon}}}
+                </div>
+                <div>
+                    <span class="font-semibold text-gray-600">URL:</span>
+                    <p class="text-gray-900 mt-1 break-all">
+                        <a href="{{social.url}}" target="_blank" class="text-blue-600 hover:underline">
+                            {{social.url}}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Information -->
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <h2 class="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">Thông Tin Người Tạo</h2>
+            <div class="space-y-3">
+                <div>
+                    <span class="font-semibold text-gray-600">Tên người dùng:</span>
+                    <p class="text-gray-900 mt-1">{{social.userId.username}}</p>
+                </div>
+                {{#if social.userId.email}}
+                <div>
+                    <span class="font-semibold text-gray-600">Email:</span>
+                    <p class="text-gray-900 mt-1">{{social.userId.email}}</p>
+                </div>
+                {{/if}}
+                <div>
+                    <span class="font-semibold text-gray-600">Ngày tạo:</span>
+                    <p class="text-gray-900 mt-1">{{formatDate social.createdAt}}</p>
+                </div>
+                <div>
+                    <span class="font-semibold text-gray-600">Cập nhật lần cuối:</span>
+                    <p class="text-gray-900 mt-1">{{formatDate social.updatedAt}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Icon Reference -->
+    <div class="bg-blue-50 p-4 rounded-lg mt-6">
+        <h3 class="text-lg font-semibold mb-2 text-blue-800">💡 Thông tin về Icon</h3>
+        <p class="text-gray-700">
+            Icon này sử dụng Font Awesome. Để thay đổi icon, bạn có thể truy cập 
+            <a href="https://fontawesome.com/icons" target="_blank" class="text-blue-600 hover:underline font-semibold">
+                Font Awesome Icons
+            </a>
+            để chọn icon phù hợp.
+        </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-6 flex justify-end space-x-4">
+        <a href="/admin/socials/edit/{{social._id}}" class="bg-yellow-500 text-white px-6 py-2 rounded-md hover:bg-yellow-600">
+            Chỉnh sửa
+        </a>
+        <a href="/admin/socials" class="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600">
+            Quay lại
+        </a>
+    </div>
+</div>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

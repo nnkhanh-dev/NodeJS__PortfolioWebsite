@@ -18,13 +18,36 @@ class HomeController {
       const Technical = require('../models/Technical');
       const TechType = require('../models/TechType');
 
-      const [projects, socials, experiences, educations, technicals] = await Promise.all([
-        Project.find({ userId: user._id }).lean(),
+      const [projects, socials, experiences, educations, technicals, techTypes] = await Promise.all([
+        Project.find({ userId: user._id }).populate('technologies', 'name').lean(),
         Social.find({ userId: user._id }).lean(),
-        Experience.find({ userId: user._id }).lean(),
-        Education.find({ userId: user._id }).lean(),
-        Technical.find({ userId: user._id }).populate('typeId').lean()
+        Experience.find({ userId: user._id }).sort({ from: -1 }).lean(),
+        Education.find({ userId: user._id }).sort({ from: -1 }).lean(),
+        Technical.find({ userId: user._id }).populate('typeId').lean(),
+        TechType.find().lean()
       ]);
+
+      // Group technicals by type
+      const techByType = {};
+      technicals.forEach(tech => {
+        if (tech.typeId) {
+          const typeName = tech.typeId.name;
+          if (!techByType[typeName]) {
+            techByType[typeName] = {
+              icon: tech.typeId.icon, // Lấy icon từ TechType
+              skills: []
+            };
+          }
+          techByType[typeName].skills.push(tech);
+        }
+      });
+
+      // Convert object to array for Handlebars
+      const techByTypeArray = Object.keys(techByType).map(key => ({
+        typeName: key,
+        icon: techByType[key].icon,
+        skills: techByType[key].skills
+      }));
 
       res.render('home', {
         user,
@@ -32,7 +55,8 @@ class HomeController {
         socials,
         experiences,
         educations,
-        technicals
+        technicals,
+        techByTypeArray
       });
     } catch (err) {
       console.error(err);

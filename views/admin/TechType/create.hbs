@@ -5,10 +5,48 @@
         <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Tên loại kỹ năng:</label>
         <input type="text" id="name" name="name" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
     </div>
+    
+    <div class="mb-4">
+        <label for="icon" class="block text-gray-700 text-sm font-bold mb-2">Icon SVG:</label>
+        <textarea id="icon" name="icon" rows="8" required 
+                  placeholder='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+</svg>' 
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-mono text-sm"></textarea>
+        <p class="text-xs text-gray-500 mt-1">Dán SVG code từ <a href="https://heroicons.com" target="_blank" class="text-blue-500 underline">Heroicons</a> hoặc <a href="https://fontawesome.com" target="_blank" class="text-blue-500 underline">Font Awesome</a></p>
+    </div>
+    
+    <!-- Icon Preview -->
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Xem trước Icon:</label>
+        <div class="border rounded p-4 bg-gray-50">
+            <div id="iconPreview" class="w-12 h-12 text-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+    
     {{#if error}}
-        <p class="text-red-500 text-xs italic">{{error}}</p>
+        <p class="text-red-500 text-xs italic mb-4">{{error}}</p>
     {{/if}}
+    
     <div class="flex items-center justify-between">
         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Thêm</button>
+        <a href="/admin/tech-types" class="text-gray-600 hover:text-gray-800">Hủy</a>
     </div>
 </form>
+
+<script>
+    // Icon preview
+    const iconInput = document.getElementById('icon');
+    const iconPreview = document.getElementById('iconPreview');
+    
+    iconInput.addEventListener('input', (e) => {
+        const svgCode = e.target.value.trim();
+        if (svgCode.startsWith('<svg') && svgCode.endsWith('</svg>')) {
+            iconPreview.innerHTML = svgCode;
+        }
+    });
+</script>

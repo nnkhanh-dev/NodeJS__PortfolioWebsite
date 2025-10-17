@@ -1,0 +1,136 @@
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold">Chi tiết Dự Án</h1>
+        <div>
+            <a href="/admin/projects/edit/{{project._id}}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2">
+                <i class="fas fa-edit"></i> Chỉnh sửa
+            </a>
+            <a href="/admin/projects" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg p-8 mb-6">
+        <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+            <div class="flex-shrink-0">
+                {{#if project.thumbnail}}
+                    <img src="{{project.thumbnail}}" alt="{{project.name}}" class="w-48 h-48 rounded-lg shadow-md object-cover">
+                {{else}}
+                    <div class="w-48 h-48 bg-gray-300 rounded-lg shadow-md flex items-center justify-center">
+                        <span class="text-gray-500">No Image</span>
+                    </div>
+                {{/if}}
+            </div>
+            <div class="flex-1 text-white">
+                <h2 class="text-3xl font-bold mb-2">{{project.name}}</h2>
+                {{#if project.description}}
+                    <p class="text-lg mb-3">{{project.description}}</p>
+                {{/if}}
+                {{#if project.url}}
+                    <a href="{{project.url}}" target="_blank" class="inline-flex items-center bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-100 transition">
+                        <i class="fas fa-external-link-alt mr-2"></i> Xem Demo
+                    </a>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Thông tin chi tiết</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm text-gray-600">Tên dự án:</p>
+                <p class="font-semibold">{{project.name}}</p>
+            </div>
+            {{#if project.url}}
+            <div>
+                <p class="text-sm text-gray-600">URL:</p>
+                <p class="font-semibold break-all">
+                    <a href="{{project.url}}" target="_blank" class="text-blue-600 hover:underline">{{project.url}}</a>
+                </p>
+            </div>
+            {{/if}}
+            <div>
+                <p class="text-sm text-gray-600">Ngày tạo:</p>
+                <p class="font-semibold">{{formatDate project.createdAt}}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Cập nhật lần cuối:</p>
+                <p class="font-semibold">{{formatDate project.updatedAt}}</p>
+            </div>
+        </div>
+        {{#if project.description}}
+        <div class="mt-4">
+            <p class="text-sm text-gray-600">Mô tả:</p>
+            <p class="mt-1 text-gray-800">{{project.description}}</p>
+        </div>
+        {{/if}}
+    </div>
+
+    {{#if project.userId}}
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h3 class="text-xl font-bold mb-4 text-gray-800">Thông tin người tạo</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm text-gray-600">Tên:</p>
+                <p class="font-semibold">{{project.userId.name}}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Email:</p>
+                <p class="font-semibold">{{project.userId.email}}</p>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h3 class="text-xl font-bold mb-4 text-red-600">Vùng nguy hiểm</h3>
+        <p class="text-gray-600 mb-4">Xóa dự án này sẽ không thể khôi phục.</p>
+        <button onclick="confirmDelete('{{project._id}}')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            <i class="fas fa-trash"></i> Xóa dự án
+        </button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Bạn có chắc chắn?',
+            text: "Bạn sẽ không thể hoàn tác hành động này!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Có, xóa nó!',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/admin/projects/delete/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Đã xóa!',
+                            text: 'Dự án đã được xóa.',
+                            icon: 'success'
+                        }).then(() => {
+                            window.location.href = '/admin/projects';
+                        });
+                    } else {
+                        Swal.fire('Lỗi!', data.message || 'Có lỗi xảy ra', 'error');
+                    }
+                })
+                .catch(error => {
+                    Swal.fire('Lỗi!', 'Không thể xóa dự án', 'error');
+                });
+            }
+        });
+    }
+</script>

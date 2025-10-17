@@ -1,0 +1,102 @@
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="flex flex-wrap justify-between items-center mb-4">
+        <h1 class="text-2xl font-semibold">Danh sách Dự Án</h1>
+        <a href="/admin/projects/create" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Thêm Dự Án</a>
+    </div>
+    <div class="overflow-x-auto">
+        <table id="projectTable" class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="w-1/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</th>
+                    <th class="w-3/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên dự án</th>
+                    <th class="w-2/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Công nghệ</th>
+                    <th class="w-1/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">URL</th>
+                    <th class="w-2/12 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Hành động</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {{#each projects}}
+                <tr class="{{#if @odd}}bg-gray-50{{else}}bg-gray-100{{/if}}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{increment @index}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">{{this.name}}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">
+                        {{#if this.technologies}}
+                        <div class="flex flex-wrap gap-1">
+                            {{#each this.technologies}}
+                            <span class="px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded">{{this.name}}</span>
+                            {{/each}}
+                        </div>
+                        {{else}}
+                        <span class="text-gray-400 italic text-xs">Chưa có</span>
+                        {{/if}}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        {{#if this.url}}
+                            <a href="{{this.url}}" target="_blank" class="text-blue-600 hover:underline">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        {{/if}}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <a href="/admin/projects/show/{{this._id}}" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600">Xem</a>
+                        <a href="/admin/projects/edit/{{this._id}}" class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 ml-2">Sửa</a>
+                        <a href="/admin/projects/delete/{{this._id}}" class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 ml-2 delete-project">Xóa</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- DataTable Script -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#projectTable').DataTable();
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.querySelectorAll('.delete-project').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const url = this.getAttribute('href');
+
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa?',
+                text: 'Hành động này không thể hoàn tác!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Vâng, xóa nó!',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(url, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Đã xóa!', data.message, 'success').then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire('Lỗi!', data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('Lỗi!', 'Không thể xóa dự án.', 'error');
+                    });
+                }
+            });
+        });
+    });
+</script>

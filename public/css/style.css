@@ -4,26 +4,56 @@
       linear-gradient(to right, rgba(75, 85, 99, 0.4) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(75, 85, 99, 0.4) 1px, transparent 1px);
     background-size: 40px 40px;
-  }
-
-@keyframes typing {
-  0% { width: 0; }        /* bắt đầu */
-  33.33% { width: 100%; } /* gõ hết chữ trong 2s */
-  66.66% { width: 100%; } /* dừng 2s */
-  100% { width: 0; }      /* xóa hết trong 2s */
 }
 
-.typing-effect {
-  display: inline-block;
-  overflow: hidden;
-  border-right: .15em solid white;
-  white-space: nowrap;
-  animation: typing 4s steps(30, end) infinite, blink .75s step-end infinite;
+/* Animations */
+@keyframes blob {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1); 
+  }
+  25% { 
+    transform: translate(20px, -50px) scale(1.1); 
+  }
+  50% { 
+    transform: translate(-20px, 20px) scale(0.9); 
+  }
+  75% { 
+    transform: translate(50px, 50px) scale(1.05); 
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+@keyframes tilt {
+  0%, 100% { 
+    transform: rotate(-1deg); 
+  }
+  50% { 
+    transform: rotate(1deg); 
+  }
+}
+
+.animate-tilt {
+  animation: tilt 10s infinite linear;
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); } /* di chuyển lên 10px ở giữa */
+  0%, 100% { 
+    transform: translateY(0); 
+  }
+  50% { 
+    transform: translateY(-20px); 
+  }
 }
 
 .float-animation {
@@ -31,9 +61,41 @@
 }
 
 @keyframes pulse-slow {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(1.05); 
+  }
 }
+
 .animate-pulse-slow {
-    animation: pulse-slow 2s infinite;
+  animation: pulse-slow 2s infinite;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

@@ -5,6 +5,10 @@ const projectSchema = new mongoose.Schema({
   description: { type: String },
   thumbnail: { type: String }, // URL hình
   url: { type: String },       // Link demo/project
+  technologies: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Technical'
+  }],
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

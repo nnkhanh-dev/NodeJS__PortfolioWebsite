@@ -8,7 +8,7 @@ class TechTypeController {
             res.render('admin/TechType/index', {
                 layout: 'admin',
                 title: 'Loại Công Nghệ',
-                user: req.user,
+                // user từ res.locals
                 techTypes,
             });
         } catch (error) {
@@ -21,23 +21,28 @@ class TechTypeController {
         res.render('admin/TechType/create', {
             layout: 'admin',
             title: 'Thêm Loại Công Nghệ',
-            user: req.user,
+            // user từ res.locals
         });
     }
 
     async store(req, res) {
         try {
-            const { name } = req.body;
-            if (!name) {
+            let { name, icon } = req.body;
+            
+            // Trim whitespace
+            name = name ? name.trim() : '';
+            icon = icon ? icon.trim() : '';
+            
+            // Validation
+            if (!name || !icon) {
                 return res.status(400).render('admin/TechType/create', {
                     layout: 'admin',
                     title: 'Thêm Loại Công Nghệ',
-                    user: req.user,
-                    error: 'Tên loại công nghệ không được để trống.',
+                    error: 'Tên và icon loại công nghệ không được để trống.',
                 });
             }
 
-            const newTechType = new TechType({ name });
+            const newTechType = new TechType({ name, icon });
             await newTechType.save();
 
             res.redirect('/admin/tech-types');
@@ -57,7 +62,7 @@ class TechTypeController {
             res.render('admin/TechType/edit', {
                 layout: 'admin',
                 title: 'Chỉnh sửa Loại Công Nghệ',
-                user: req.user,
+                // user từ res.locals
                 techType,
             });
         } catch (error) {
@@ -69,19 +74,33 @@ class TechTypeController {
     async update(req, res) {
         try {
             const { id } = req.params;
-            const { name } = req.body;
-            if (!name) {
+            let { name, icon } = req.body;
+            
+            // Trim whitespace
+            name = name ? name.trim() : '';
+            icon = icon ? icon.trim() : '';
+            
+            // Validation
+            if (!name || !icon) {
                 const techType = await TechType.findById(id).lean();
                 return res.status(400).render('admin/TechType/edit', {
                     layout: 'admin',
                     title: 'Chỉnh sửa Loại Công Nghệ',
-                    user: req.user,
                     techType,
-                    error: 'Tên loại công nghệ không được để trống.',
+                    error: 'Tên và icon loại công nghệ không được để trống.',
                 });
             }
 
-            await TechType.findByIdAndUpdate(id, { name });
+            // Update using .save() method (more reliable than findByIdAndUpdate)
+            const techType = await TechType.findById(id);
+            if (!techType) {
+                return res.status(404).send('Loại công nghệ không tồn tại.');
+            }
+            
+            techType.name = name;
+            techType.icon = icon;
+            await techType.save();
+            
             res.redirect('/admin/tech-types');
         } catch (error) {
             console.error('Error updating tech type:', error);

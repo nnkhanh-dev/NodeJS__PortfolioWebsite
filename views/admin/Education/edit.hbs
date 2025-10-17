@@ -1,0 +1,56 @@
+<h1 class="text-2xl font-bold mb-4">Chỉnh sửa Học Vấn</h1>
+
+<form action="/admin/educations/edit/{{education._id}}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div class="mb-4">
+        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Tên trường:</label>
+        <input type="text" id="name" name="name" value="{{education.name}}" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    
+    <div class="mb-4">
+        <label for="major" class="block text-gray-700 text-sm font-bold mb-2">Ngành học:</label>
+        <input type="text" id="major" name="major" value="{{education.major}}" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    
+    <div class="mb-4">
+        <label for="level" class="block text-gray-700 text-sm font-bold mb-2">Bậc học:</label>
+        <select id="level" name="level" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <option value="">-- Chọn bậc học --</option>
+            <option value="Trung cấp" {{#ifEqual education.level "Trung cấp"}}selected{{/ifEqual}}>Trung cấp</option>
+            <option value="Cao đẳng" {{#ifEqual education.level "Cao đẳng"}}selected{{/ifEqual}}>Cao đẳng</option>
+            <option value="Đại học" {{#ifEqual education.level "Đại học"}}selected{{/ifEqual}}>Đại học</option>
+            <option value="Thạc sĩ" {{#ifEqual education.level "Thạc sĩ"}}selected{{/ifEqual}}>Thạc sĩ</option>
+            <option value="Tiến sĩ" {{#ifEqual education.level "Tiến sĩ"}}selected{{/ifEqual}}>Tiến sĩ</option>
+        </select>
+    </div>
+    
+    <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+            <label for="from" class="block text-gray-700 text-sm font-bold mb-2">Từ:</label>
+            <input type="text" id="from" name="from" value="{{education.from}}" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+        <div>
+            <label for="to" class="block text-gray-700 text-sm font-bold mb-2">Đến:</label>
+            <input type="text" id="to" name="to" value="{{education.to}}" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+    </div>
+    
+    <div class="mb-4">
+        <label for="gpa" class="block text-gray-700 text-sm font-bold mb-2">GPA (0-4.0):</label>
+        <input type="number" id="gpa" name="gpa" required value="{{education.gpa}}" step="0.01" min="0" max="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    
+    <div class="mb-4">
+        <label for="achievements" class="block text-gray-700 text-sm font-bold mb-2">Thành tích (không bắt buộc):</label>
+        <textarea id="achievements" name="achievements" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{education.achievements}}</textarea>
+        <p class="text-gray-500 text-xs mt-1">Mô tả các thành tích, giải thưởng, hoặc điểm nổi bật trong quá trình học tập</p>
+    </div>
+    
+    {{#if error}}
+        <p class="text-red-500 text-xs italic mb-4">{{error}}</p>
+    {{/if}}
+    
+    <div class="flex items-center justify-between">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cập nhật</button>
+        <a href="/admin/educations" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Hủy</a>
+    </div>
+</form>

@@ -1,0 +1,56 @@
+<h1 class="text-2xl font-bold mb-4">Thêm Học Vấn Mới</h1>
+
+<form action="/admin/educations/create" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div class="mb-4">
+        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Tên trường:</label>
+        <input type="text" id="name" name="name" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    
+    <div class="mb-4">
+        <label for="major" class="block text-gray-700 text-sm font-bold mb-2">Ngành học:</label>
+        <input type="text" id="major" name="major" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    
+    <div class="mb-4">
+        <label for="level" class="block text-gray-700 text-sm font-bold mb-2">Bậc học:</label>
+        <select id="level" name="level" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <option value="">-- Chọn bậc học --</option>
+            <option value="Trung cấp">Trung cấp</option>
+            <option value="Cao đẳng">Cao đẳng</option>
+            <option value="Đại học">Đại học</option>
+            <option value="Thạc sĩ">Thạc sĩ</option>
+            <option value="Tiến sĩ">Tiến sĩ</option>
+        </select>
+    </div>
+    
+    <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+            <label for="from" class="block text-gray-700 text-sm font-bold mb-2">Từ:</label>
+            <input type="text" id="from" name="from" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+        <div>
+            <label for="to" class="block text-gray-700 text-sm font-bold mb-2">Đến:</label>
+            <input type="text" id="to" name="to" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+    </div>
+    
+    <div class="mb-4">
+        <label for="gpa" class="block text-gray-700 text-sm font-bold mb-2">GPA (0-4.0):</label>
+        <input type="number" id="gpa" name="gpa" required step="0.01" min="0" max="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    
+    <div class="mb-4">
+        <label for="achievements" class="block text-gray-700 text-sm font-bold mb-2">Thành tích (không bắt buộc):</label>
+        <textarea id="achievements" name="achievements" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+        <p class="text-gray-500 text-xs mt-1">Mô tả các thành tích, giải thưởng, hoặc điểm nổi bật trong quá trình học tập</p>
+    </div>
+    
+    {{#if error}}
+        <p class="text-red-500 text-xs italic mb-4">{{error}}</p>
+    {{/if}}
+    
+    <div class="flex items-center justify-between">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Thêm</button>
+        <a href="/admin/educations" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Hủy</a>
+    </div>
+</form>

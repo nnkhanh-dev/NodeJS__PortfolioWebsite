@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const experienceSchema = new mongoose.Schema({
   name: { type: String },
-  from: { type: Date },
-  to: { type: Date },
+  from: { type: String },
+  to: { type: String },
   position: { type: String },
   description: { type: String },
   features: { type: String },

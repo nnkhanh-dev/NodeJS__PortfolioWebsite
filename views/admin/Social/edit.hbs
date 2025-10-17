@@ -1,0 +1,65 @@
+<h1 class="text-2xl font-bold mb-4">Chỉnh sửa Mạng Xã Hội</h1>
+
+<form action="/admin/socials/edit/{{social._id}}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div class="mb-4">
+        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Tên mạng xã hội:</label>
+        <input type="text" id="name" name="name" value="{{social.name}}" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
+    </div>
+    
+    <div class="mb-4">
+        <label for="icon" class="block text-gray-700 text-sm font-bold mb-2">Icon class:</label>
+        <textarea id="icon" name="icon" rows="3" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-mono text-sm">{{social.icon}}</textarea>
+    </div>
+    
+    <div class="mb-4">
+        <label for="url" class="block text-gray-700 text-sm font-bold mb-2">URL :</label>
+        <input type="url" id="url" name="url" value="{{social.url}}" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
+    </div>
+    
+    <!-- Preview -->
+    <div class="mb-4 p-4 bg-gray-50 rounded">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Xem trước:</label>
+        <div class="flex items-center space-x-3">
+            <div id="iconPreview" class="text-3xl">{{{social.icon}}}</div>
+            <div>
+                <p id="namePreview" class="text-gray-700 font-semibold">{{social.name}}</p>
+                <p id="urlPreview" class="text-gray-500 text-sm">{{social.url}}</p>
+            </div>
+        </div>
+    </div>
+    
+    {{#if error}}
+        <p class="text-red-500 text-xs italic mb-4">{{error}}</p>
+    {{/if}}
+    
+    <div class="flex items-center justify-between">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cập nhật</button>
+        <a href="/admin/socials" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Hủy</a>
+    </div>
+</form>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+    // Live preview
+    const iconInput = document.getElementById('icon');
+    const nameInput = document.getElementById('name');
+    const urlInput = document.getElementById('url');
+    const iconPreview = document.getElementById('iconPreview');
+    const namePreview = document.getElementById('namePreview');
+    const urlPreview = document.getElementById('urlPreview');
+
+    iconInput.addEventListener('input', function() {
+        // Render HTML trực tiếp (hỗ trợ cả SVG và Font Awesome)
+        iconPreview.innerHTML = this.value;
+    });
+
+    nameInput.addEventListener('input', function() {
+        namePreview.textContent = this.value;
+    });
+
+    urlInput.addEventListener('input', function() {
+        urlPreview.textContent = this.value;
+    });
+</script>

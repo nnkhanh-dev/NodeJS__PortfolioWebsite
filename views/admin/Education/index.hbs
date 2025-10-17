@@ -1,0 +1,94 @@
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="flex flex-wrap justify-between items-center mb-4">
+        <h1 class="text-2xl font-semibold">Danh sách Học Vấn</h1>
+        <a href="/admin/educations/create" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Thêm Học Vấn</a>
+    </div>
+    <div class="overflow-x-auto">
+        <table id="educationTable" class="min-w-full divide-y divide-gray-200 py-5">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="w-1/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                    <th class="w-3/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trường</th>
+                    <th class="w-2/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngành</th>
+                    <th class="w-1/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bậc học</th>
+                    <th class="w-1/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">GPA</th>
+                    <th class="w-2/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thời gian</th>
+                    <th class="w-2/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thành tích</th>
+                    <th class="w-2/12 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Hành động</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {{#each educations}}
+                <tr class="{{#if @odd}}bg-gray-50{{else}}bg-gray-100{{/if}}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{increment @index}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{this.name}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{this.major}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{this.level}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{this.gpa}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{this.from}} - {{this.to}}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">
+                        {{#if this.achievements}}
+                        <span class="truncate block max-w-xs" title="{{this.achievements}}">{{this.achievements}}</span>
+                        {{else}}
+                        <span class="text-gray-400 italic">Chưa có</span>
+                        {{/if}}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <a href="/admin/educations/edit/{{this._id}}" class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600">Sửa</a>
+                        <a href="/admin/educations/delete/{{this._id}}" class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 ml-2 delete-education">Xóa</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- DataTable Script -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#educationTable').DataTable();
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.querySelectorAll('.delete-education').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const url = this.getAttribute('href');
+
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa?',
+                text: 'Hành động này không thể hoàn tác!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Vâng, xóa nó!',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(url, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Đã xóa!', data.message, 'success').then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire('Lỗi!', data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('Lỗi!', 'Không thể xóa học vấn.', 'error');
+                    });
+                }
+            });
+        });
+    });
+</script>
