@@ -9,6 +9,7 @@ var morgan = require('morgan')
 const handlebars = require('express-handlebars');
 const routes = require('./routes');
 const session = require('express-session');
+const flash = require('connect-flash');
 const initializePassport = require('./config/passport');
 const User = require('./models/User');
 const Education = require('./models/Education');
@@ -38,6 +39,7 @@ const hbs = handlebars.create({
     },
     helpers: {
         increment: (value) => value + 1,
+        subtract: (a, b) => a - b,
         isEven: (value) => value % 2 === 0,
         ifEqual: function(a, b, options) {
             if (a && b && a.toString() === b.toString()) {
@@ -110,16 +112,21 @@ app.use(session({
   saveUninitialized: false
 }));
 
+// Flash messages
+app.use(flash());
+
 // Passport init
 initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Add user to res.locals from session
+// Add user and flash messages to res.locals
 app.use((req, res, next) => {
   if (req.isAuthenticated()) {
     res.locals.user = req.user;
   }
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
   next();
 });
 

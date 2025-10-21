@@ -17,14 +17,21 @@ class HomeController {
       const Education = require('../models/Education');
       const Technical = require('../models/Technical');
       const TechType = require('../models/TechType');
+      const Post = require('../models/Post');
 
-      const [projects, socials, experiences, educations, technicals, techTypes] = await Promise.all([
+      const [projects, socials, experiences, educations, technicals, techTypes, posts] = await Promise.all([
         Project.find({ userId: user._id }).populate('technologies', 'name').lean(),
         Social.find({ userId: user._id }).lean(),
         Experience.find({ userId: user._id }).sort({ from: -1 }).lean(),
         Education.find({ userId: user._id }).sort({ from: -1 }).lean(),
         Technical.find({ userId: user._id }).populate('typeId').lean(),
-        TechType.find().lean()
+        TechType.find().lean(),
+        Post.find({ status: 'published' })
+          .sort({ createdAt: -1 })
+          .limit(3)
+          .populate('category', 'name slug')
+          .populate('author', 'name')
+          .lean()
       ]);
 
       // Group technicals by type
@@ -56,7 +63,8 @@ class HomeController {
         experiences,
         educations,
         technicals,
-        techByTypeArray
+        techByTypeArray,
+        posts
       });
     } catch (err) {
       console.error(err);

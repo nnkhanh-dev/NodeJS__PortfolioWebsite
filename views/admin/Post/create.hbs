@@ -1,0 +1,212 @@
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-semibold mb-6">Thêm Bài viết mới</h1>
+    
+    <form action="/admin/posts/create" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <!-- Title -->
+        <div>
+            <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                Tiêu đề <span class="text-red-500">*</span>
+            </label>
+            <input 
+                type="text" 
+                id="title" 
+                name="title" 
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Nhập tiêu đề bài viết...">
+        </div>
+
+        <!-- Slug (optional - auto-generated) -->
+        <div>
+            <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">
+                Slug (Tùy chọn - Tự động tạo nếu để trống)
+            </label>
+            <input 
+                type="text" 
+                id="slug" 
+                name="slug"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="bai-viet-cua-toi">
+            <p class="mt-1 text-sm text-gray-500">Slug sẽ tự động tạo từ tiêu đề nếu bỏ trống</p>
+        </div>
+
+        <!-- Category -->
+        <div>
+            <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                Danh mục <span class="text-red-500">*</span>
+            </label>
+            <select 
+                id="category" 
+                name="category" 
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">-- Chọn danh mục --</option>
+                {{#each categories}}
+                    <option value="{{this._id}}">{{this.name}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <!-- Thumbnail -->
+        <div>
+            <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-2">
+                Ảnh Thumbnail
+            </label>
+            <input 
+                type="file" 
+                id="thumbnail" 
+                name="thumbnail"
+                accept="image/*"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <p class="mt-1 text-sm text-gray-500">Ảnh đại diện cho bài viết (JPEG, PNG, GIF, WEBP - Max 5MB)</p>
+        </div>
+
+        <!-- Status -->
+        <div>
+            <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                Trạng thái
+            </label>
+            <select 
+                id="status" 
+                name="status"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="draft" selected>Nháp</option>
+                <option value="published">Xuất bản</option>
+                <option value="hidden">Ẩn</option>
+            </select>
+        </div>
+
+        <!-- Content (CKEditor) -->
+        <div>
+            <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
+                Nội dung <span class="text-red-500">*</span>
+            </label>
+            <textarea 
+                id="content" 
+                name="content" 
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-md"></textarea>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-3 pt-4">
+            <button 
+                type="submit" 
+                class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                Thêm Bài viết
+            </button>
+            <a 
+                href="/admin/posts" 
+                class="bg-gray-300 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-400 transition-colors">
+                Hủy
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- CKEditor 4 - Full Featured WYSIWYG Editor -->
+<script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+<script>
+    // Initialize CKEditor
+    var editor = CKEDITOR.replace('content', {
+        height: 450,
+        language: 'vi',
+        
+        // Full toolbar configuration
+        toolbar: [
+            { name: 'document', items: ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print'] },
+            { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+            { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt'] },
+            '/',
+            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat'] },
+            { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl'] },
+            { name: 'links', items: ['Link', 'Unlink', 'Anchor'] },
+            { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'] },
+            '/',
+            { name: 'styles', items: ['Styles', 'Format', 'Font', 'FontSize'] },
+            { name: 'colors', items: ['TextColor', 'BGColor'] },
+            { name: 'tools', items: ['Maximize', 'ShowBlocks'] }
+        ],
+        
+        // Allow all HTML content
+        allowedContent: true,
+        
+        // Font sizes
+        fontSize_sizes: '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;72/72px',
+        
+        // Font families
+        font_names: 'Arial/Arial, Helvetica, sans-serif;' +
+            'Comic Sans MS/Comic Sans MS, cursive;' +
+            'Courier New/Courier New, Courier, monospace;' +
+            'Georgia/Georgia, serif;' +
+            'Lucida Sans Unicode/Lucida Sans Unicode, Lucida Grande, sans-serif;' +
+            'Tahoma/Tahoma, Geneva, sans-serif;' +
+            'Times New Roman/Times New Roman, Times, serif;' +
+            'Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;' +
+            'Verdana/Verdana, Geneva, sans-serif',
+        
+        // Format tags
+        format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
+        
+        // Remove plugins we don't need
+        removePlugins: 'elementspath',
+        
+        // Resize options
+        resize_enabled: true,
+        resize_dir: 'vertical',
+        
+        // Remove dialog tabs we don't need
+        removeDialogTabs: 'image:advanced;link:advanced',
+        
+        // Code snippet plugin config
+        codeSnippet_theme: 'monokai_sublime',
+        
+        // Image upload configuration
+        filebrowserUploadUrl: '/admin/upload/image',
+        filebrowserUploadMethod: 'form',
+        
+        // Styling
+        contentsCss: [
+            'https://cdn.ckeditor.com/4.22.1/full/contents.css',
+            'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css'
+        ]
+    });
+
+    // Debug: Check if CKEditor loaded successfully
+    editor.on('instanceReady', function() {
+        console.log('✅ CKEditor loaded successfully');
+    });
+
+    // Sync CKEditor data before form submit - CRITICAL!
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default submit first
+        
+        console.log('📝 Form submitting...');
+        console.log('📋 CKEditor content:', editor.getData());
+        
+        // Method 1: Update using updateElement()
+        editor.updateElement();
+        
+        // Method 2: Manually set textarea value (backup method)
+        var textarea = document.getElementById('content');
+        textarea.value = editor.getData();
+        
+        console.log('✅ Textarea value after sync:', textarea.value);
+        console.log('📊 Content length:', textarea.value.length);
+        
+        // Now submit the form
+        e.target.submit();
+    });
+</script>
+
+<style>
+    /* CKEditor 4 custom styling */
+    .cke_chrome {
+        border: 1px solid #d1d5db !important;
+        border-radius: 0.375rem;
+    }
+    .cke_top {
+        background: #f9fafb !important;
+        border-bottom: 1px solid #e5e7eb !important;
+    }
+</style>

@@ -9,6 +9,9 @@ const experienceRoutes = require('./admin/experienceRoutes');
 const socialRoutes = require('./admin/socialRoutes');
 const projectRoutes = require('./admin/projectRoutes');
 const userRoutes = require('./admin/userRoutes');
+const categoryPostRoutes = require('./admin/categoryPostRoutes');
+const postRoutes = require('./admin/postRoutes');
+const uploadRoutes = require('./admin/uploadRoutes');
 
 
 router.get('/dashboard', isAdmin, dashboardController.index);
@@ -20,5 +23,8 @@ router.use('/experiences', experienceRoutes);
 router.use('/socials', socialRoutes);
 router.use('/projects', projectRoutes);
 router.use('/user', userRoutes);
+router.use('/category-posts', categoryPostRoutes);
+router.use('/posts', postRoutes);
+router.use('/upload', uploadRoutes);
 
 module.exports = router;
