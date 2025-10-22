@@ -1,13 +1,32 @@
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+
+// Ensure upload directory exists
+const ensureDirectoryExists = (dirPath) => {
+    if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+        console.log(`✅ Created directory: ${dirPath}`);
+    }
+};
+
+// Create user upload directories on module load
+const avatarsDir = path.join(__dirname, '../public/uploads/avatars');
+const resumesDir = path.join(__dirname, '../public/uploads/resumes');
+ensureDirectoryExists(avatarsDir);
+ensureDirectoryExists(resumesDir);
 
 // Cấu hình lưu trữ file cho user profile
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         if (file.fieldname === 'avatar') {
-            cb(null, 'public/uploads/avatars/');
+            const uploadPath = 'public/uploads/avatars/';
+            ensureDirectoryExists(uploadPath); // Double check before upload
+            cb(null, uploadPath);
         } else if (file.fieldname === 'resume') {
-            cb(null, 'public/uploads/resumes/');
+            const uploadPath = 'public/uploads/resumes/';
+            ensureDirectoryExists(uploadPath); // Double check before upload
+            cb(null, uploadPath);
         }
     },
     filename: function (req, file, cb) {

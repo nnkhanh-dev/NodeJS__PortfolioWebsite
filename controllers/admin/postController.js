@@ -2,12 +2,27 @@ const Post = require('../../models/Post');
 const CategoryPost = require('../../models/CategoryPost');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const sanitizeHtml = require('sanitize-html');
+
+// Ensure upload directory exists
+const ensureDirectoryExists = (dirPath) => {
+    if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+        console.log(`✅ Created directory: ${dirPath}`);
+    }
+};
+
+// Create posts upload directory on module load
+const postsDir = path.join(__dirname, '../../public/uploads/posts');
+ensureDirectoryExists(postsDir);
 
 // Configure multer for thumbnail upload
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads/posts/');
+        const uploadPath = 'public/uploads/posts/';
+        ensureDirectoryExists(uploadPath); // Double check before upload
+        cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
