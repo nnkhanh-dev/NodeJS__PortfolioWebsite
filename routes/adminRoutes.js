@@ -16,7 +16,7 @@ const uploadRoutes = require('./admin/uploadRoutes');
 
 router.get('/dashboard', isAdmin, dashboardController.index);
 
-router.use('/tech-types', techTypeRoutes);
+router.use('/tech-types', techtypeRoutes);
 router.use('/technicals', techRoutes);
 router.use('/educations', educationRoutes);
 router.use('/experiences', experienceRoutes);
