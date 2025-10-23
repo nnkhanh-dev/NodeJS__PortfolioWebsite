@@ -1,6 +1,6 @@
 <h1 class="text-2xl font-bold mb-4">Thêm Dự Án Mới</h1>
 
-<form action="/admin/projects/create" method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+<form action="/admin/projects/create" method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" id="createProjectForm">
     <div class="mb-4">
         <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Tên dự án:</label>
         <input type="text" id="name" name="name" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -12,9 +12,9 @@
     </div>
     
     <div class="mb-4">
-        <label for="thumbnail" class="block text-gray-700 text-sm font-bold mb-2">Thumbnail:</label>
+        <label for="thumbnail" class="block text-gray-700 text-sm font-bold mb-2">Thumbnail: <span class="text-red-500">*</span></label>
         <div id="dropArea" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition-colors">
-            <input type="file" id="thumbnail" required name="thumbnail" accept="image/*" class="hidden">
+            <input type="file" id="thumbnail" name="thumbnail" accept="image/*" class="hidden">
             <div id="dropText">
                 <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
                 <p class="text-gray-600">Kéo thả ảnh vào đây hoặc click để chọn</p>
@@ -83,6 +83,23 @@
 </form>
 
 <script>
+    // Form validation
+    const form = document.getElementById('createProjectForm');
+    const fileInput = document.getElementById('thumbnail');
+    
+    form.addEventListener('submit', function(e) {
+        if (!fileInput.files || fileInput.files.length === 0) {
+            e.preventDefault();
+            alert('Vui lòng chọn ảnh thumbnail cho dự án!');
+            dropArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            dropArea.classList.add('border-red-500');
+            setTimeout(() => {
+                dropArea.classList.remove('border-red-500');
+            }, 2000);
+            return false;
+        }
+    });
+
     // Drag and drop functionality
     const dropArea = document.getElementById('dropArea');
     const fileInput = document.getElementById('thumbnail');
