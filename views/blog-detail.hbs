@@ -80,6 +80,11 @@
                 </div>
             </div>
 
+            <!-- Table of Contents -->
+            <div id="table-of-contents" data-aos="fade-up" data-aos-delay="50">
+                <!-- Will be populated by JavaScript -->
+            </div>
+
             <!-- Article Content -->
             <article class="prose prose-invert prose-lg max-w-none" data-aos="fade-up" data-aos-delay="100">
                 <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 sm:p-12 border border-gray-700/50 shadow-xl">
@@ -297,4 +302,18 @@
         border-radius: 1rem;
         margin: 2rem 0;
     }
+
+    /* Scroll Margin for Headings (for smooth scroll with fixed header) */
+    .blog-content h1,
+    .blog-content h2,
+    .blog-content h3,
+    .blog-content h4 {
+        scroll-margin-top: 120px;
+    }
 </style>
+
+<!-- Table of Contents CSS -->
+<link rel="stylesheet" href="/css/blog-toc.css">
+
+<!-- Table of Contents Script -->
+<script src="/js/blog-toc.js"></script>
