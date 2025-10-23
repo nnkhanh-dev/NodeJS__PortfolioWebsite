@@ -239,9 +239,13 @@
   const avatarPreview = document.getElementById('avatarPreview');
   const avatarPreviewImg = document.getElementById('avatarPreviewImg');
   const removeAvatarBtn = document.getElementById('removeAvatar');
+  let isAvatarDialogOpen = false;
 
   // Click to select file
-  avatarDropArea.addEventListener('click', () => avatarInput.click());
+  avatarDropArea.addEventListener('click', () => {
+    isAvatarDialogOpen = true;
+    avatarInput.click();
+  });
 
   // Drag and drop events
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -255,6 +259,11 @@
 
   ['dragenter', 'dragover'].forEach(eventName => {
     avatarDropArea.addEventListener(eventName, () => {
+      // Close dialog if open and user is dragging
+      if (isAvatarDialogOpen) {
+        isAvatarDialogOpen = false;
+        avatarInput.blur();
+      }
       avatarDropArea.classList.add('border-blue-500', 'bg-blue-50');
     });
   });
@@ -268,16 +277,33 @@
   avatarDropArea.addEventListener('drop', handleAvatarDrop);
   avatarInput.addEventListener('change', handleAvatarSelect);
 
+  // Detect when dialog is cancelled
+  avatarInput.addEventListener('cancel', function() {
+    isAvatarDialogOpen = false;
+  });
+
+  // Fallback: detect focus return to window
+  window.addEventListener('focus', function() {
+    setTimeout(() => {
+      isAvatarDialogOpen = false;
+    }, 100);
+  });
+
   function handleAvatarDrop(e) {
     const dt = e.dataTransfer;
     const files = dt.files;
     if (files.length > 0) {
-      avatarInput.files = files;
+      // Use DataTransfer API for proper file assignment
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(files[0]);
+      avatarInput.files = dataTransfer.files;
+      
       previewAvatar(files[0]);
     }
   }
 
   function handleAvatarSelect(e) {
+    isAvatarDialogOpen = false;
     const files = e.target.files;
     if (files.length > 0) {
       previewAvatar(files[0]);
@@ -288,14 +314,24 @@
     // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      alert('Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WEBP)');
+      Swal.fire({
+        icon: 'error',
+        title: 'File không hợp lệ!',
+        text: 'Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WEBP)',
+        confirmButtonColor: '#3b82f6'
+      });
       avatarInput.value = '';
       return;
     }
 
     // Validate file size (10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('Kích thước file không được vượt quá 10MB');
+      Swal.fire({
+        icon: 'error',
+        title: 'File quá lớn!',
+        text: 'Kích thước file không được vượt quá 10MB',
+        confirmButtonColor: '#3b82f6'
+      });
       avatarInput.value = '';
       return;
     }
@@ -321,9 +357,13 @@
   const resumePreview = document.getElementById('resumePreview');
   const resumeFileName = document.getElementById('resumeFileName');
   const removeResumeBtn = document.getElementById('removeResume');
+  let isResumeDialogOpen = false;
 
   // Click to select file
-  resumeDropArea.addEventListener('click', () => resumeInput.click());
+  resumeDropArea.addEventListener('click', () => {
+    isResumeDialogOpen = true;
+    resumeInput.click();
+  });
 
   // Drag and drop events
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -332,6 +372,11 @@
 
   ['dragenter', 'dragover'].forEach(eventName => {
     resumeDropArea.addEventListener(eventName, () => {
+      // Close dialog if open and user is dragging
+      if (isResumeDialogOpen) {
+        isResumeDialogOpen = false;
+        resumeInput.blur();
+      }
       resumeDropArea.classList.add('border-blue-500', 'bg-blue-50');
     });
   });
@@ -345,16 +390,26 @@
   resumeDropArea.addEventListener('drop', handleResumeDrop);
   resumeInput.addEventListener('change', handleResumeSelect);
 
+  // Detect when dialog is cancelled
+  resumeInput.addEventListener('cancel', function() {
+    isResumeDialogOpen = false;
+  });
+
   function handleResumeDrop(e) {
     const dt = e.dataTransfer;
     const files = dt.files;
     if (files.length > 0) {
-      resumeInput.files = files;
+      // Use DataTransfer API for proper file assignment
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(files[0]);
+      resumeInput.files = dataTransfer.files;
+      
       previewResume(files[0]);
     }
   }
 
   function handleResumeSelect(e) {
+    isResumeDialogOpen = false;
     const files = e.target.files;
     if (files.length > 0) {
       previewResume(files[0]);
@@ -364,14 +419,24 @@
   function previewResume(file) {
     // Validate file type
     if (file.type !== 'application/pdf') {
-      alert('Chỉ chấp nhận file PDF');
+      Swal.fire({
+        icon: 'error',
+        title: 'File không hợp lệ!',
+        text: 'Chỉ chấp nhận file PDF',
+        confirmButtonColor: '#3b82f6'
+      });
       resumeInput.value = '';
       return;
     }
 
     // Validate file size (10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('Kích thước file không được vượt quá 10MB');
+      Swal.fire({
+        icon: 'error',
+        title: 'File quá lớn!',
+        text: 'Kích thước file không được vượt quá 10MB',
+        confirmButtonColor: '#3b82f6'
+      });
       resumeInput.value = '';
       return;
     }
@@ -398,22 +463,42 @@
     if (currentPassword || newPassword || confirmPassword) {
       if (!currentPassword) {
         e.preventDefault();
-        alert('Vui lòng nhập mật khẩu hiện tại để đổi mật khẩu');
+        Swal.fire({
+          icon: 'error',
+          title: 'Thiếu mật khẩu hiện tại!',
+          text: 'Vui lòng nhập mật khẩu hiện tại để đổi mật khẩu',
+          confirmButtonColor: '#3b82f6'
+        });
         return;
       }
       if (!newPassword) {
         e.preventDefault();
-        alert('Vui lòng nhập mật khẩu mới');
+        Swal.fire({
+          icon: 'error',
+          title: 'Thiếu mật khẩu mới!',
+          text: 'Vui lòng nhập mật khẩu mới',
+          confirmButtonColor: '#3b82f6'
+        });
         return;
       }
       if (newPassword !== confirmPassword) {
         e.preventDefault();
-        alert('Mật khẩu mới và xác nhận mật khẩu không khớp');
+        Swal.fire({
+          icon: 'error',
+          title: 'Mật khẩu không khớp!',
+          text: 'Mật khẩu mới và xác nhận mật khẩu không khớp',
+          confirmButtonColor: '#3b82f6'
+        });
         return;
       }
       if (newPassword.length < 6) {
         e.preventDefault();
-        alert('Mật khẩu mới phải có ít nhất 6 ký tự');
+        Swal.fire({
+          icon: 'error',
+          title: 'Mật khẩu quá ngắn!',
+          text: 'Mật khẩu mới phải có ít nhất 6 ký tự',
+          confirmButtonColor: '#3b82f6'
+        });
         return;
       }
     }

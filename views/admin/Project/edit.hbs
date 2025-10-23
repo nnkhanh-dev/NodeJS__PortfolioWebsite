@@ -106,6 +106,7 @@
     const fileName = document.getElementById('fileName');
     const removeImageBtn = document.getElementById('removeImage');
     const thumbnailPreview = document.getElementById('thumbnailPreview');
+    let isDialogOpen = false; // Track if file dialog is open
 
     // Prevent default drag behaviors
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -128,6 +129,11 @@
     });
 
     function highlight(e) {
+        // Close dialog if it's open and user is dragging
+        if (isDialogOpen) {
+            isDialogOpen = false;
+            fileInput.blur();
+        }
         dropArea.classList.add('border-blue-500', 'bg-blue-50');
     }
 
@@ -143,20 +149,43 @@
         const files = dt.files;
         
         if (files.length > 0) {
-            fileInput.files = files;
+            // Use DataTransfer API for proper file assignment
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(files[0]);
+            fileInput.files = dataTransfer.files;
+            
             handleFiles(files);
         }
     }
 
     // Handle click to select file
-    dropArea.addEventListener('click', () => {
+    dropArea.addEventListener('click', (e) => {
+        // Prevent opening file dialog if clicking on preview area
+        if (e.target.closest('#imagePreviewContainer')) {
+            return;
+        }
+        isDialogOpen = true;
         fileInput.click();
     });
 
+    // Track when dialog is closed
     fileInput.addEventListener('change', function() {
+        isDialogOpen = false;
         if (this.files.length > 0) {
             handleFiles(this.files);
         }
+    });
+
+    // Detect when dialog is cancelled
+    fileInput.addEventListener('cancel', function() {
+        isDialogOpen = false;
+    });
+
+    // Fallback: detect focus return to window
+    window.addEventListener('focus', function() {
+        setTimeout(() => {
+            isDialogOpen = false;
+        }, 100);
     });
 
     function handleFiles(files) {
@@ -164,13 +193,23 @@
         
         // Check file type
         if (!file.type.startsWith('image/')) {
-            alert('Vui lòng chọn file ảnh!');
+            Swal.fire({
+                icon: 'error',
+                title: 'File không hợp lệ!',
+                text: 'Vui lòng chọn file ảnh (JPG, PNG, GIF, WEBP)',
+                confirmButtonColor: '#3b82f6'
+            });
             return;
         }
 
         // Check file size (5MB)
         if (file.size > 5 * 1024 * 1024) {
-            alert('Kích thước file không được vượt quá 5MB!');
+            Swal.fire({
+                icon: 'error',
+                title: 'File quá lớn!',
+                text: 'Kích thước file không được vượt quá 5MB',
+                confirmButtonColor: '#3b82f6'
+            });
             return;
         }
 

@@ -83,23 +83,6 @@
 </form>
 
 <script>
-    // Form validation
-    const form = document.getElementById('createProjectForm');
-    const fileInput = document.getElementById('thumbnail');
-    
-    form.addEventListener('submit', function(e) {
-        if (!fileInput.files || fileInput.files.length === 0) {
-            e.preventDefault();
-            alert('Vui lòng chọn ảnh thumbnail cho dự án!');
-            dropArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            dropArea.classList.add('border-red-500');
-            setTimeout(() => {
-                dropArea.classList.remove('border-red-500');
-            }, 2000);
-            return false;
-        }
-    });
-
     // Drag and drop functionality
     const dropArea = document.getElementById('dropArea');
     const fileInput = document.getElementById('thumbnail');
@@ -109,6 +92,33 @@
     const fileName = document.getElementById('fileName');
     const removeImageBtn = document.getElementById('removeImage');
     const thumbnailPreview = document.getElementById('thumbnailPreview');
+    const form = document.getElementById('createProjectForm');
+    let hasFile = false; // Track if file has been selected
+    let isDialogOpen = false; // Track if file dialog is open
+    
+    // Form validation - Check actual file input instead of flag
+    form.addEventListener('submit', function(e) {
+        if (!fileInput.files || fileInput.files.length === 0) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            Swal.fire({
+                icon: 'error',
+                title: 'Thiếu ảnh thumbnail!',
+                text: 'Vui lòng chọn ảnh thumbnail cho dự án',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3b82f6'
+            }).then(() => {
+                dropArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                dropArea.classList.add('border-red-500', 'bg-red-50');
+                setTimeout(() => {
+                    dropArea.classList.remove('border-red-500', 'bg-red-50');
+                }, 2000);
+            });
+            
+            return false;
+        }
+    });
 
     // Prevent default drag behaviors
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -131,6 +141,12 @@
     });
 
     function highlight(e) {
+        // Close dialog if it's open and user is dragging
+        if (isDialogOpen) {
+            isDialogOpen = false;
+            // Blur the file input to close the dialog
+            fileInput.blur();
+        }
         dropArea.classList.add('border-blue-500', 'bg-blue-50');
     }
 
@@ -146,20 +162,43 @@
         const files = dt.files;
         
         if (files.length > 0) {
-            fileInput.files = files;
+            // Manually create FileList-like object and assign to input
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(files[0]);
+            fileInput.files = dataTransfer.files;
+            
             handleFiles(files);
         }
     }
 
     // Handle click to select file
-    dropArea.addEventListener('click', () => {
+    dropArea.addEventListener('click', (e) => {
+        // Prevent opening file dialog if clicking on preview area
+        if (e.target.closest('#imagePreviewContainer')) {
+            return;
+        }
+        isDialogOpen = true;
         fileInput.click();
     });
 
+    // Track when dialog is closed
     fileInput.addEventListener('change', function() {
+        isDialogOpen = false;
         if (this.files.length > 0) {
             handleFiles(this.files);
         }
+    });
+
+    // Detect when dialog is cancelled (closed without selecting)
+    fileInput.addEventListener('cancel', function() {
+        isDialogOpen = false;
+    });
+
+    // Fallback: detect focus return to window (dialog closed)
+    window.addEventListener('focus', function() {
+        setTimeout(() => {
+            isDialogOpen = false;
+        }, 100);
     });
 
     function handleFiles(files) {
@@ -167,16 +206,28 @@
         
         // Check file type
         if (!file.type.startsWith('image/')) {
-            alert('Vui lòng chọn file ảnh!');
+            Swal.fire({
+                icon: 'error',
+                title: 'File không hợp lệ!',
+                text: 'Vui lòng chọn file ảnh (JPG, PNG, GIF, WEBP)',
+                confirmButtonColor: '#3b82f6'
+            });
             return;
         }
 
         // Check file size (5MB)
         if (file.size > 5 * 1024 * 1024) {
-            alert('Kích thước file không được vượt quá 5MB!');
+            Swal.fire({
+                icon: 'error',
+                title: 'File quá lớn!',
+                text: 'Kích thước file không được vượt quá 5MB',
+                confirmButtonColor: '#3b82f6'
+            });
             return;
         }
 
+        hasFile = true; // Mark that file has been selected
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             imagePreview.src = e.target.result;
@@ -192,6 +243,7 @@
     removeImageBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         fileInput.value = '';
+        hasFile = false; // Reset file flag
         dropText.classList.remove('hidden');
         imagePreviewContainer.classList.add('hidden');
         thumbnailPreview.innerHTML = '<span class="text-gray-400 text-xs">No Image</span>';
